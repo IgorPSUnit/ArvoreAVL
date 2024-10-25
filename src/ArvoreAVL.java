@@ -168,6 +168,7 @@ public class ArvoreAVL {
                 }
 
                 if (raiz.getRight() != null && raiz.getLeft() != null && raiz.getLeft().getValor() < raiz.getRight().getValor()) {
+                    System.out.println("Entrou no if");
                 }
             }
 
