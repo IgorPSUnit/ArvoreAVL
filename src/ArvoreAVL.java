@@ -29,8 +29,7 @@ public class ArvoreAVL {
             if (noAtual.getLeft().getFb() >= 0) {
                 return rotacionarDireita(noAtual);
             } else {
-                noAtual.setLeft(rotacionarEsquerda(noAtual.getLeft()));
-                return rotacionarDireita(noAtual);
+                return rotacaoDulpaDireita(noAtual);
             }
         }
 
@@ -38,8 +37,7 @@ public class ArvoreAVL {
             if (noAtual.getRight().getFb() <= 0) {
                 return rotacionarEsquerda(noAtual);
             } else {
-                noAtual.setRight(rotacionarDireita(noAtual.getRight()));
-                return rotacionarEsquerda(noAtual);
+                return rotacaoDulpaEsquerda(noAtual);
             }
         }
 
@@ -49,8 +47,8 @@ public class ArvoreAVL {
     private No rotacionarDireita(No no) {
         No novoRaiz = no.getLeft();
         No subArvoreDireita = novoRaiz.getRight();
-        novoRaiz.setRight(no);
         no.setLeft(subArvoreDireita);
+        novoRaiz.setRight(no);
         no.setFb(calcularFatorBalanceamento(no));
         novoRaiz.setFb(calcularFatorBalanceamento(novoRaiz));
 
@@ -65,6 +63,16 @@ public class ArvoreAVL {
         no.setFb(calcularFatorBalanceamento(no));
         novoRaiz.setFb(calcularFatorBalanceamento(novoRaiz));
         return novoRaiz;
+    }
+
+    private No rotacaoDulpaDireita(No no){
+        no.setLeft(rotacionarEsquerda(no.getLeft()));
+        return rotacionarDireita(no);
+    }
+
+    private No rotacaoDulpaEsquerda(No no){
+        no.setRight(rotacionarDireita(no.getRight()));
+        return rotacionarEsquerda(no);
     }
 
 
@@ -201,7 +209,7 @@ public class ArvoreAVL {
             for (int i = 0; i < nivel; i++) {
                 System.out.print("   ");
             }
-            System.out.println(no.getValor() + " nivel: " + nivel + "FB: "+ no.getFb());
+            System.out.println(no.getValor() + " nivel: " + nivel + " FB: "+ no.getFb());
             this.imprimirArvoreRec(no.getLeft(), nivel + 1);
             this.imprimirArvoreRec(no.getRight(), nivel + 1);
         }

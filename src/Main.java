@@ -19,11 +19,10 @@ public class Main {
 
         arvoreBB.inserir(500);
         arvoreBB.inserir(430);
-        arvoreBB.inserir(400);
         arvoreBB.inserir(780);
-        arvoreBB.inserir(650);
-        arvoreBB.inserir(950);
-        arvoreBB.inserir(425);
+        arvoreBB.inserir(600);
+        arvoreBB.inserir(800);
+        arvoreBB.inserir(700);
 
 
 
