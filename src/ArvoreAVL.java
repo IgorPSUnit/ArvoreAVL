@@ -19,6 +19,39 @@ public class ArvoreAVL {
             } else if (valor > raiz.getValor()) {
                 raiz.setRight(this.inserirBRec(raiz.getRight(), valor));
             }
+            fatorBalanceamento();
+            if(raiz.getFb() == 0 || raiz.getFb() == 1 || raiz.getFb() == -1){
+                System.out.println("No balançeado");
+            }else{
+                if(raiz.getFb() > 1){
+                    System.out.println("No desbalançeado, Realizar rotação a direita " + "FB: " +raiz.getFb());
+                    if(raiz.getLeft().getFb() > 0){
+                        System.out.println("FB do no a esquerda: "+ raiz.getLeft().getFb());
+                        No raizEsquerda = raiz.getLeft();
+                        No raizDirRot = raizEsquerda.getRight();
+
+                        raizEsquerda.setRight(raiz);
+                        raiz.setRight(raizDirRot);
+                        raiz = raizEsquerda;
+                    }else{
+                        System.out.println("Algo deu errado!");
+                    }
+
+                }else if (raiz.getFb() < -1){
+                    System.out.println("No desbalançeado, Realizar rotação a esquerda " + "FB: " +raiz.getFb());
+                    if(raiz.getRight().getFb() < 0){
+                        System.out.println("FB do no a direita: "+ raiz.getRight().getFb());
+                        No raizDireita = raiz.getRight();
+                        No raizEsqRot = raizDireita.getLeft();
+
+                        raizDireita.setLeft(raiz);
+                        raiz.setRight(raizEsqRot);
+                        raiz = raizDireita;
+                    }else{
+                        System.out.println("Algo deu errado!");
+                    }
+                }
+            }
 
             return raiz;
         }
@@ -127,7 +160,7 @@ public class ArvoreAVL {
             int alturaDireita = this.calculaFBRec(no.getRight());
             int fb = alturaEsquerda - alturaDireita;
             no.setFb(fb);
-            return Math.max(alturaEsquerda, alturaDireita) + 1;
+            return Math.max(alturaEsquerda, alturaDireita) +1;
         }
     }
 

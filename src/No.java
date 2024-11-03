@@ -36,8 +36,8 @@ public class No {
     }
 
     public String toString() {
-        int var10000 = this.valor;
-        return "No{valor=" + var10000 + ", left=" + String.valueOf(this.left) + ", right=" + String.valueOf(this.right) + ", fb=" + this.fb + "}";
+        int valor = this.valor;
+        return "No valor=" + valor + ", left=" + String.valueOf(this.left) + ", right=" + String.valueOf(this.right) + ", fb=" + this.fb + "}";
     }
 
     public int getFb() {
