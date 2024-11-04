@@ -19,43 +19,78 @@ public class ArvoreAVL {
             } else if (valor > raiz.getValor()) {
                 raiz.setRight(this.inserirBRec(raiz.getRight(), valor));
             }
-            fatorBalanceamento();
-            if(raiz.getFb() == 0 || raiz.getFb() == 1 || raiz.getFb() == -1){
-                System.out.println("No balançeado");
-            }else{
-                if(raiz.getFb() > 1){
-                    System.out.println("No desbalançeado, Realizar rotação a direita " + "FB: " +raiz.getFb());
-                    if(raiz.getLeft().getFb() > 0){
-                        System.out.println("FB do no a esquerda: "+ raiz.getLeft().getFb());
-                        No raizEsquerda = raiz.getLeft();
-                        No raizDirRot = raizEsquerda.getRight();
-
-                        raizEsquerda.setRight(raiz);
-                        raiz.setRight(raizDirRot);
-                        raiz = raizEsquerda;
-                    }else{
-                        System.out.println("Algo deu errado!");
-                    }
-
-                }else if (raiz.getFb() < -1){
-                    System.out.println("No desbalançeado, Realizar rotação a esquerda " + "FB: " +raiz.getFb());
-                    if(raiz.getRight().getFb() < 0){
-                        System.out.println("FB do no a direita: "+ raiz.getRight().getFb());
-                        No raizDireita = raiz.getRight();
-                        No raizEsqRot = raizDireita.getLeft();
-
-                        raizDireita.setLeft(raiz);
-                        raiz.setRight(raizEsqRot);
-                        raiz = raizDireita;
-                    }else{
-                        System.out.println("Algo deu errado!");
-                    }
-                }
-            }
-
-            return raiz;
         }
+            fatorBalanceamento();
+            return ajustarBalanceamento(raiz);
+        }
+
+    private No ajustarBalanceamento(No noAtual) {
+        if (noAtual.getFb() > 1) {
+            if (noAtual.getLeft().getFb() >= 0) {
+                return rotacionarDireita(noAtual);
+            } else {
+                return rotacaoDulpaDireita(noAtual);
+            }
+        }
+
+        if (noAtual.getFb() < -1) {
+            if (noAtual.getRight().getFb() <= 0) {
+                return rotacionarEsquerda(noAtual);
+            } else {
+                return rotacaoDulpaEsquerda(noAtual);
+            }
+        }
+
+        return noAtual;
     }
+
+    private No rotacionarDireita(No no) {
+        No novoRaiz = no.getLeft();
+        No subArvoreDireita = novoRaiz.getRight();
+        no.setLeft(subArvoreDireita);
+        novoRaiz.setRight(no);
+        no.setFb(calcularFatorBalanceamento(no));
+        novoRaiz.setFb(calcularFatorBalanceamento(novoRaiz));
+
+        return novoRaiz;
+    }
+
+    private No rotacionarEsquerda(No no) {
+        No novoRaiz = no.getRight();
+        No subArvoreEsquerda = novoRaiz.getLeft();
+        novoRaiz.setLeft(no);
+        no.setRight(subArvoreEsquerda);
+        no.setFb(calcularFatorBalanceamento(no));
+        novoRaiz.setFb(calcularFatorBalanceamento(novoRaiz));
+        return novoRaiz;
+    }
+
+    private No rotacaoDulpaDireita(No no){
+        no.setLeft(rotacionarEsquerda(no.getLeft()));
+        return rotacionarDireita(no);
+    }
+
+    private No rotacaoDulpaEsquerda(No no){
+        no.setRight(rotacionarDireita(no.getRight()));
+        return rotacionarEsquerda(no);
+    }
+
+
+    private int calcularFatorBalanceamento(No no) {
+        if (no == null) {
+            return 0;
+        }
+        return calculaAltura(no.getLeft()) - calculaAltura(no.getRight());
+    }
+
+
+    private int calculaAltura(No no) {
+        if (no == null) {
+            return 0;
+        }
+        return Math.max(calculaAltura(no.getLeft()), calculaAltura(no.getRight())) + 1;
+    }
+
 
     public void preorder() {
         this.preorderRec(this.raiz);
@@ -141,6 +176,7 @@ public class ArvoreAVL {
                 }
 
                 if (raiz.getRight() != null && raiz.getLeft() != null && raiz.getLeft().getValor() < raiz.getRight().getValor()) {
+                    System.out.println("Entrou no if");
                 }
             }
 
@@ -160,7 +196,7 @@ public class ArvoreAVL {
             int alturaDireita = this.calculaFBRec(no.getRight());
             int fb = alturaEsquerda - alturaDireita;
             no.setFb(fb);
-            return Math.max(alturaEsquerda, alturaDireita) +1;
+            return Math.max(alturaEsquerda, alturaDireita) + 1;
         }
     }
 
@@ -171,13 +207,11 @@ public class ArvoreAVL {
     private void imprimirArvoreRec(No no, int nivel) {
         if (no != null) {
             for (int i = 0; i < nivel; i++) {
-                System.out.print("   "); // Adiciona os espaços para formatar o nível
+                System.out.print("   ");
             }
-
-            System.out.println(no.getValor() + " nivel: " + nivel + "FB: "+ no.getFb()); // Imprime o valor do nó e seu nível
-
-            this.imprimirArvoreRec(no.getLeft(), nivel + 1);  // Recursão para a subárvore esquerda
-            this.imprimirArvoreRec(no.getRight(), nivel + 1); // Recursão para a subárvore direita
+            System.out.println(no.getValor() + " nivel: " + nivel + " FB: "+ no.getFb());
+            this.imprimirArvoreRec(no.getLeft(), nivel + 1);
+            this.imprimirArvoreRec(no.getRight(), nivel + 1);
         }
     }
 
