@@ -75,7 +75,6 @@ public class ArvoreAVL {
         return rotacionarEsquerda(no);
     }
 
-
     private int calcularFatorBalanceamento(No no) {
         if (no == null) {
             return 0;
@@ -83,14 +82,12 @@ public class ArvoreAVL {
         return calculaAltura(no.getLeft()) - calculaAltura(no.getRight());
     }
 
-
     private int calculaAltura(No no) {
         if (no == null) {
             return 0;
         }
         return Math.max(calculaAltura(no.getLeft()), calculaAltura(no.getRight())) + 1;
     }
-
 
     public void preorder() {
         this.preorderRec(this.raiz);
@@ -154,7 +151,7 @@ public class ArvoreAVL {
         }
     }
 
-    private void removerNo(int valor) {
+    public void removerNo(int valor) {
         this.raiz = this.removerRec(this.raiz, valor);
     }
 
@@ -170,18 +167,24 @@ public class ArvoreAVL {
                 if (raiz.getLeft() == null) {
                     return raiz.getRight();
                 }
-
                 if (raiz.getRight() == null) {
                     return raiz.getLeft();
                 }
 
-                if (raiz.getRight() != null && raiz.getLeft() != null && raiz.getLeft().getValor() < raiz.getRight().getValor()) {
-                    System.out.println("Entrou no if");
-                }
+                No menorDireita = encontrarMin(raiz.getRight());
+                raiz.setValor(menorDireita.getValor());
+                raiz.setRight(removerRec(raiz.getRight(), menorDireita.getValor()));
             }
+            fatorBalanceamento();
 
-            return raiz;
+            return ajustarBalanceamento(raiz);
         }
+    }
+    private No encontrarMin(No no) {
+        while (no.getLeft() != null) {
+            no = no.getLeft();
+        }
+        return no;
     }
 
     public void fatorBalanceamento() {
